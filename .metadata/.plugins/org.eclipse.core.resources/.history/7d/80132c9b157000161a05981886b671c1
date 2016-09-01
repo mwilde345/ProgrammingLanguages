@@ -1,0 +1,15 @@
+package main;
+import java.util.stream.*;
+import java.util.function.*;
+
+public class ProblemSet {
+	public static void main(String [] args){
+		ProblemSet ps = new ProblemSet();		
+	}
+	
+	public ProblemSet(){
+		System.out.println("Dot Product");
+		DotProductTest();
+	}
+	
+}

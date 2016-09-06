@@ -1,8 +1,9 @@
 package main;
 import java.util.stream.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+
+import com.sun.javafx.collections.MappingChange.Map;
+
+import java.util.*;
 import java.util.function.*;
 import java.lang.Math;
 public class ProblemSet {
@@ -25,25 +26,49 @@ public class ProblemSet {
 		System.out.println(WaterTemp(190));
 		//Double Sequence
 		System.out.println("Double Sequence");
-		DoubleSeq(new int[]{10,20,30,40,50});
+		System.out.println(Arrays.toString(DoubleSeq(new int[]{10,20,30,40,50})));
 		//DuplicateSequence
 		System.out.println("");
 		System.out.println("Duplicate Sequence");
-		DuplicateSeq(new String[] {"first","second","third","fourth"});
+		System.out.println(DuplicateSeq(new String[] {"first","second","third","fourth"}));
 		//Remove Duplicates
 		System.out.println("Remove Duplicates");
-		RemoveDuplicate(new String[]{"1","2","3","3","4","5","7","4","10","4","3","6"});
+		System.out.println(RemoveDuplicate(new String[]{"1","2","3","3","4","5","7","4","10","4","3","6"}));
 		//Sum and Product
 		System.out.println("");
 		System.out.println("Sum and Product");
-		SumProduct(new int[]{2,4,6,8,9},"product");
+		System.out.println(SumProduct(new int[]{2,4,6,8,9},val->Arrays.stream(val).sum(),val->Arrays.stream(val).reduce((x,y)->(x*y)).getAsInt()));
 		//ListofPosities
 		System.out.println("List of Positives");
-		PosList(new int[]{-2,3,6,8,-10,3,-29});
+		System.out.println(PosList(new int[]{-2,3,6,8,-10,3,-29}));
 		System.out.println("");
 		//Max
 		System.out.println("Max");
-		MaxFind(new int[]{20,300,-120,3,55});
+		System.out.println(MaxFind(new int[]{20,300,-120,3,55}));
+		//FirstSquares
+		System.out.println("First N Squares");
+		System.out.println(NSquares(9));
+		System.out.println("");
+		//Translation
+		System.out.println("Translation: Some say that programming is an art.");
+		System.out.println(Translation("Some say that programming is an art."));
+		//Count Articles
+		System.out.println("Count Articles");
+		System.out.println(CountArticles("An apple a day with an ape gives the doc a surprise with an even better outcome than a purple dog."));
+		//List of Colors
+		System.out.println("List of Colors");
+		System.out.println(ListOfColors("The quick brown fox jumped over the lazy red dog on a purple and green pasture of yellow flowers"));
+		//Youngest
+		System.out.println("Youngest Person");
+		System.out.println("All People: ");
+		List<Person> people = new ArrayList<Person>();
+		for(int i = 1; i<=5; i++){
+			people.add(new Person("Human"+i,i*15));
+		}
+		long seed = System.nanoTime();
+		Collections.shuffle(people, new Random(seed));
+		people.forEach(p->System.out.println(p.print()));
+		System.out.println(YoungestPerson(people));
 	}
 	
 	public int DotProductTest(int[] a,int[] b){
@@ -58,30 +83,102 @@ public class ProblemSet {
 	public String WaterTemp(double temp){
 		return temp <=32 ? "Solid" : temp>32&&temp<=212 ? "Liquid" : temp>212 ? "Gas" : "Fail";
 	}
-	public void DoubleSeq(int [] a){
-		IntStream.range(0, a.length).map(n->a[n]*2).forEach(x->System.out.print(x+" "));
+	public int []  DoubleSeq(int [] a){
+		return Arrays.stream(a).map(n->n*2).toArray();
 	}
-	public void DuplicateSeq(String[] a){
-		Arrays.stream(a).forEach(s->System.out.println(s+" "+s));
+	public String DuplicateSeq(String[] a){
+		return Arrays.stream(a).map(s->s+" "+s).collect(Collectors.toList()).toString();
 	}
-	public void RemoveDuplicate(String [] a){
-		Arrays.stream(a).distinct().forEach(n->System.out.print(n+" "));
+	public String RemoveDuplicate(String [] a){
+		return Arrays.stream(a).distinct().collect(Collectors.toList()).toString();
 	}
-	public void SumProduct(int [] a,String procedure){
-		switch(procedure){
-		case "sum":
-			System.out.println(IntStream.range(0, a.length).map(n->a[n]).sum());
-			break;
-		case "product":
-			System.out.println(IntStream.range(0,a.length).map(n->n<a.length-1?a[n]*a[n+1]:a[n]*a[a.length-1]).sum());
-		default:
-			break;
+	public String SumProduct(int [] a,Function<int[], Integer> sum, Function<int [],Integer> product){
+		return "Product: "+product.apply(a)+" Sum: "+sum.apply(a);
+	}
+	public String PosList(int[] a){
+		return Arrays.toString(Arrays.stream(a).filter(n->n>0).toArray());
+	}
+	public int MaxFind(int[] a){
+		return Arrays.stream(a).max().getAsInt();
+	}
+	public String NSquares(int a){
+		return Arrays.toString(IntStream.range(0, a+1).map(n->n*n).toArray());
+	}
+	public String Translation(String phrase){
+		String[] thePhrase = phrase.split(" |\\.");
+		return Arrays.toString(Arrays.stream(thePhrase).map(s->getWord(s)).toArray());
+	}
+	public String getWord(String input){ //http://www.oracle.com/technetwork/articles/java/architect-streams-pt2-2227132.html
+		HashMap<String, String> dict=new HashMap<String, String>();
+		dict.put("Some", "Manche");
+		dict.put("say", "meinen");
+		dict.put("that", "das");
+		dict.put("programming", "Programmieren");
+		dict.put("is", "sei");
+		dict.put("an", "eine");
+		dict.put("art", "Kunst");
+		return dict.get(input);
+	}
+	/*public Map<String, Long> CountArticles(String message){
+		 List<String> themessage = Arrays.asList(message.split(" "));
+		 Stream<String> streams = themessage.stream();
+	        Map<String, Long> wordCount = streams
+	                .flatMap(Arrays::stream)
+	                .collect(Collectors.groupingBy(Function.identity(),Collectors.counting())); 
+		return wordCount;
+	}*/
+	
+	public HashMap<String, Integer> CountArticles(String message){
+		HashMap<String, Integer> themap = new HashMap<String, Integer>();
+		List<String> themessage = Arrays.asList(message.split(" "));
+		String[] words = themessage.stream().filter(s->checkArticle(s)).toArray(size->new String[size]);
+		for(String word : words){
+			themap.put(word.toLowerCase(), themap.get(word)==null ? 1 : themap.get(word) + 1);
+		}
+		return themap;
+	}
+	
+	public boolean checkArticle(String word){
+		List<String> myList = Arrays.asList("a","an","the");
+		return myList.stream().anyMatch(str -> str.trim().equalsIgnoreCase(word));
+	}
+	
+	public String ListOfColors(String message){
+		HashMap<String, Integer> themap = new HashMap<String, Integer>();
+		List<String> themessage = Arrays.asList(message.split(" "));
+		String[] words = themessage.stream().filter(s->checkColors(s)).toArray(size->new String[size]);
+		return Arrays.toString(words);
+	}
+	
+	public boolean checkColors(String word){
+		List<String> myList = Arrays.asList("black","brown","blue","red","yellow","orange","purple","green","gray","pink");
+		return myList.stream().anyMatch(str -> str.trim().equalsIgnoreCase(word));
+	}
+	
+	public String YoungestPerson(List<Person> lp){
+		Person youngest = lp.stream().reduce(lp.get(0),(x,y)->(x.getAge()<y.getAge() ? x : y));
+		return "Youngest Person: "+youngest.print();
+	}
+	
+	
+	
+	static class Person{
+		String name;
+		int age;
+		public String print(){
+			return "Name: "+name+" Age: "+age;
+		}
+		public Person(String n, int a){
+			name = n;
+			age = a;
+		}		
+		int  getAge(){
+			return age;
+		}
+		String getName(){
+			return name;
 		}
 	}
-	public void PosList(int[] a){
-		IntStream.range(0,a.length).filter(n->a[n]>0).forEach(x->System.out.print(x+" "));
-	}
-	public void MaxFind(int[] a){
-		System.out.println(IntStream.range(0, a.length).map(n->a[n]).max());
-	}
+	
 }
+

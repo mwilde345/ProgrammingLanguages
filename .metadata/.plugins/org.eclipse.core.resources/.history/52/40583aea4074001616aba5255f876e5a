@@ -1,7 +1,7 @@
 package main;
 import java.util.stream.*;
 
-import java.util.Map;
+import com.sun.javafx.collections.MappingChange.Map;
 
 import java.util.*;
 import java.util.function.*;
@@ -37,8 +37,7 @@ public class ProblemSet {
 		//Sum and Product
 		System.out.println("");
 		System.out.println("Sum and Product");
-		System.out.println(SumProduct("Sum",new int[]{2,4,6,8,9},val->Arrays.stream(val).sum()));
-		System.out.println(SumProduct("Product",new int[]{2,4,6,8,9},val->Arrays.stream(val).reduce((x,y)->(x*y)).getAsInt()));
+		System.out.println(SumProduct(new int[]{2,4,6,8,9},val->Arrays.stream(val).sum(),val->Arrays.stream(val).reduce((x,y)->(x*y)).getAsInt()));
 		//ListofPosities
 		System.out.println("List of Positives");
 		System.out.println(PosList(new int[]{-2,3,6,8,-10,3,-29}));
@@ -94,7 +93,7 @@ public class ProblemSet {
 		return Arrays.stream(a).distinct().collect(Collectors.toList()).toString();
 	}
 	public String SumProduct(String sumprod, int [] a,Function<int[], Integer> func){
-		return sumprod+": "+func.apply(a);
+		return sumprod+func.apply(a);
 	}
 	public String PosList(int[] a){
 		return Arrays.toString(Arrays.stream(a).filter(n->n>0).toArray());

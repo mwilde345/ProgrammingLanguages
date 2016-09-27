@@ -13,10 +13,10 @@
   (apply + (vector->list (vector-map * list1 list2)))
    )
 (define (duplicate list1)
-  (map (lambda (a)
-         (string-append a a))
-       list1
-  ))
+  (append-map(lambda (s)
+        (list s s))
+      list1))
+
 (define (doubled numList)
   (map (lambda (a)
     (* a 2))
@@ -59,32 +59,31 @@
   (define mylist (build-list (+ x 1) (lambda (y) (* y y))))
   (remove 0 mylist))
 
-(define (getyoungest guylist)
-  (define (firstage)
-    (send (car guylist) getage))
-  (filter (< firstage (getyoungest (cdr (guylist))))))
 
 
 (define (sum list1) (apply + list1))
 (define (product list1) (apply * list1))
-(define person%
-  (class object%
-    (init age name)
-    (super-new)
-    (define theage age)
-    (define thename name)
-    (define/public (get-age) theage)
-    (define/public (getname) thename)
-    ))
-(define guy1 (new person% [age 50] [name "joe"]))
-(define guy2 (new person% [age 51] [name "Sam"]))
-(define guy3 (new person% [age 52] [name "tim"]))
-(define guy4 (new person% [age 535] [name "bob"]))
-(define guy5 (new person% [age 5] [name "steve"]))
 
+(define-struct student (name age))
+(define student1 (make-student "Tim J."  30))
+(define student2 (make-student "Uncle J."  34))
+(define student3 (make-student "Baby J."  12))
+(define student4 (make-student "Grandpa J."  66))
+(define student5 (make-student "Old Man J."  3340))
 
-;deep list recursion
-;(+ (my-sum (car lst)) (my-sum (cdr lst)))
+(define (getyoungest studentList)
+  (student-name (car (sort studentList #:key student-age <))))
+
+(define deepList (list 1 2 (list 2 (list "fear") )))
+(define (listrec dream idea level)
+  (display dream)
+  (newline)
+  (cond
+    ((empty? dream) "not Found")
+    ((member idea dream) level)
+    ((list? (first dream)) (listrec (first dream) idea (+ level 1)))
+    (else (listrec (rest dream) idea level))
+  ))
 
 
 (define (Tester)
@@ -94,16 +93,19 @@
    (waterstate 212.1)
    (dotproduct (vector 1 2 3) (vector -2 400 6000))
    (doubled (list -.4 1 2000))
-   (duplicate '("3" "6" "-1233"))
+   (duplicate '(3 6 -1233))
    (nodupl '(3 2 a 4 3 100 .5 ad 9 2 100))
-   (translate '("one" "two" "three" "four" "five"))
+   (translate '("one" "two" "five" "four" "three"))
    (sumProduct '(2 4 6) product)
    (articles '("two" "an" "the" "with" "when" "a" "the" "an" "the" "a"))
    (colors '("gray" "fox" "orange" "apple"))
    (positives '(1 4 -2 1 10000 3 -3440 -3 .5))
    (getmax '(1 -3 200 -2032.4))
    (squarenums 7)
-   (getyoungest '(guy1 guy2 guy3 guy4 guy5))
+   (listrec deepList "fear" 1)
+   ;(procedure-arity younger?)
+   ;(getyoungest)
+   (getyoungest (list student1 student2 student3 student4 student5))
    ))
 
 (Tester)

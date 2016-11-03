@@ -1,6 +1,10 @@
 <html>
  <head>
   <title>Main Page</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script type="text/javascript">
+  console.log("Welcome to the main page.");
+  </script>
  </head>
  <body>
 	<?php
@@ -11,7 +15,7 @@
 	?>
 		<ol>
 			<?php foreach ($menuarray as $item) { ?>
-			<li><a href="/problemset/problem<?php echo $counter;?>.php"><?php echo $item; ?></a></li>
+			<li><a href="/server/problem<?php echo $counter;?>.php" id="<?php echo $item;?>"><?php echo $item; ?></a></li>
 			<?php $counter+=1;?>
 			<?php } ?>
 		</ol>

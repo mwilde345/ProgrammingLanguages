@@ -18,6 +18,7 @@
 			<li><a href="/server/problem<?php echo $counter;?>.php" id="<?php echo $item;?>"><?php echo $item; ?></a></li>
 			<?php $counter+=1;?>
 			<?php } ?>
+      <li><a href="/server/quiz.php">Quiz Problem</a></li>
 		</ol>
  </body>
 </html>

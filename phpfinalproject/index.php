@@ -10,7 +10,9 @@ session_start();
 <?php include("./php/header.php"); ?>
 <div class="panel panel-info">
 	<div class="panel panel-heading">
-		<h2>Welcome! Please Log in</h2>
+
+		<h2>Welcome!<?php if(empty($_SESSION['active_user'])):?> Please Log in<?php endif;?></h2>
+
 	</div>
 	<div class="panel-body">
 		<a href="./client/loginView.php"><button class="btn btn-primary">Login</button></a>

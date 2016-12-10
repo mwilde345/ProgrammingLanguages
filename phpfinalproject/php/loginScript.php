@@ -3,28 +3,31 @@
   ini_set('display_errors', 1);
   session_start();
   //Connect to DB
-  include 'db.php';
-  $connection = dbconnect("phpfinalproject");
+  if (empty($_POST['username']) || empty($_POST['password'])) {
+  $error = "Username or Password is invalid";
+  }
+  else
+  {
+    $username = $_POST['email'];
+    $password = $_POST['password'];
+    include 'db.php';
+    $connection = dbconnect("phpfinalproject");
 
+    $username = stripslashes($username);
 
-  $_SESSION["active_user"] = $_POST["email"];
-  echo($_SESSION["active_user"]);
+    $query = "SELECT * from User";
+    $result = mysqli_query($connection,$query);
+    mysqli_close($connection);
+    header('Location: /client/profileView.php');
+    exit();
+  }
 
-  $query = "SELECT * from User";
-  $result = mysqli_query($connection,$query);
-  mysqli_close($connection);
-  header('Location: /client/profileView.php');
-  exit();
 
 
   /*
   $error=''; // Variable To Store Error Message
 if (isset($_POST['submit'])) {
-if (empty($_POST['username']) || empty($_POST['password'])) {
-$error = "Username or Password is invalid";
-}
-else
-{
+
 // Define $username and $password
 $username=$_POST['username'];
 $password=$_POST['password'];

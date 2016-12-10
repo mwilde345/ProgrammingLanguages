@@ -12,15 +12,22 @@
 		<div class="container">
 			<div class="jumbotron">
 				<nav class="navbar navbar-default">
-					<ul class="nav navbar-nav">
-            <li><a href="/index.php">Home</a></li>
-            <?php if(isset($_SESSION['active_user'])):?>
-              <li><a href="/client/profileView.php">Profile</a></li>
-              <li><a href="/php/logoutScript.php">Logout</a></li>
-            <?php else:?>
-              <li><a href="/client/loginView.php">Login</a></li>
-            <?php endif;?>
-						<li><a href="/client/social.php">Social</a></li>
-						<li><a href="/client/sqlInject.php">SQL Injection</a></li>
-					</ul>
+					<div class="navbar-collapse collapse">
+						<ul class="nav navbar-nav navbar-left">
+	            <li><a href="/index.php">Home</a></li>
+	            <?php if(isset($_SESSION['active_user'])):?>
+	              <li><a href="/client/profileView.php">Profile</a></li>
+	              <li><a href="/php/logoutScript.php">Logout</a></li>
+	            <?php else:?>
+	              <li><a href="/client/loginView.php">Login</a></li>
+	            <?php endif;?>
+							<li><a href="/client/social.php">Social</a></li>
+							<li><a href="/client/sqlInject.php">SQL Injection</a></li>
+						</ul>
+						<ul class="nav navbar-nav navbar-right">
+							<?php if(isset($_SESSION['active_user'])):?>
+								<li><?php echo $_SESSION['active_user']; ?></li>
+							<?php endif;?>
+						</ul>
+					</div>
 				</nav>

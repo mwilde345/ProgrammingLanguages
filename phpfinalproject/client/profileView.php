@@ -1,7 +1,6 @@
 <?php
 
 session_start();
-echo isset($_SESSION["active_user"]) ? $_SESSION["active_user"] : "not set";
 
 ?>
 

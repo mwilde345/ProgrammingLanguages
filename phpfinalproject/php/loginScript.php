@@ -3,23 +3,63 @@
   ini_set('display_errors', 1);
   session_start();
   //Connect to DB
-  if (empty($_POST['username']) || empty($_POST['password'])) {
-  $error = "Username or Password is invalid";
+  $_SESSION['displayMessage'] = true;
+  $_SESSION['logged_in'] = false;
+  
+
+  if (empty($_POST['email']) || empty($_POST['password'])) {
+    $_SESSION['error'] = "Username or Password is invalid";
   }
   else
   {
-    $username = $_POST['email'];
-    $password = $_POST['password'];
+    $username = trim($_POST['email']);
+    $username = strip_tags($username);
+    $username = htmlspecialchars($username);
+    $_SESSION['username'] = $username;
+
+    $password = trim($_POST['password']);
+    $password = strip_tags($password);
+    $password = htmlspecialchars($password);
+    $password = hash('sha256',$password);
+
     include 'db.php';
     $connection = dbconnect("phpfinalproject");
 
-    $username = stripslashes($username);
-
-    $query = "SELECT * from User";
-    $result = mysqli_query($connection,$query);
-    mysqli_close($connection);
+    $currentUserQuery = "SELECT `USERNAME`,`PASSWORD` FROM `User` WHERE `USERNAME` = '$username' LIMIT 1";
+    $isCurrentUser = $connection->query($currentUserQuery);
+    if($isCurrentUser->num_rows!=0){
+      $userData = $isCurrentUser->fetch_assoc(); //WE KNOW THERE IS ONLY ONE ROW RETURNED
+      if(!hash_equals($userData["PASSWORD"],$password)){
+          $_SESSION['error'] = 'Incorrect Password';
+          unset($password);
+          header('Location: /client/loginView.php');
+      }else{
+        $_SESSION['msg'] = 'Welcome back '.$username.', you have successfully logged in.';
+        $_SESSION['logged_in'] = true;
+        unset($_SESSION['error']);
+        unset($username);
+        unset($password);
+      }
+    }else{ //SAFE DATABASE CALL
+      if(!($insert = $connection->prepare("INSERT INTO `User`(`USERNAME`,`PASSWORD`) VALUES(?, ?)"))){
+        echo "Prepare Failed (".$insert->errno .")" . $insert->error;
+      }
+      if(!($insert->bind_param("ss",$username,$password))){
+        echo "Bind Failed (".$insert->errno .")" . $insert->error;
+      }
+      if(!$insert->execute()){
+        echo "Could not insert new User: (".$insert->errno .")" . $insert->error;
+      }
+      else {
+        $_SESSION['msg'] = "Welcome ".$username.", you have successfully registered.";
+        $_SESSION['logged_in'] =true;
+        unset($_SESSION['error']);
+        unset($username);
+        unset($password);
+     }
+   }
+    $connection->close();
     header('Location: /client/profileView.php');
-    exit();
   }
 
 

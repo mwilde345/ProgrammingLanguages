@@ -1,0 +1,41 @@
+<script>
+  (function() {
+  
+	 window.__gcse = {
+      callback: myCallback
+    };
+
+    function myCallback() {
+       jQuery('input.gsc-input').keyup(function(e) { if(e.keyCode == 13 || e.which == 13) { 
+	   phpCall(jQuery('input.gsc-input').val());
+	   
+	   }});
+      jQuery('input.gsc-search-button').on('click', function(e) {
+	  phpCall(jQuery('input.gsc-input').val());
+	  });
+    }
+	function phpCall(searchID){
+		 jQuery.ajax({
+                    type: "POST",
+                    url: '../php/gSearch.php',
+                    data: { searchID : searchID},
+                     success: function(data){
+						//do something with the data!!!
+						console.log(data);
+                           }
+                });
+	}
+	
+    var cx = '014956187943969651346:2orik1kviv4';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+	//window.alert(s);
+    s.parentNode.insertBefore(gcse, s);
+  })();
+ 
+  
+</script>
+<gcse:search></gcse:search>

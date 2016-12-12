@@ -12,10 +12,30 @@ if(isset($_SESSION['error'])){
 <?php include("../php/header.php"); ?>
 <script type='text/javascript'>
 jQuery(document).ready(function(){
+  jQuery("#frequency").val('Daily');
+
+  jQuery("#frequency").change(function(){
+    if(jQuery("#specificField")){
+      jQuery("#specificField").remove();
+    }
+    if(jQuery(this).val()=='Minute'){
+      jQuery("#submitSearch").before("<div class='form-group' id='specificField'><label for='specific'>Every __ Minute(s): </label><input class='form-inline' type='number' name='specific' value='30'/></div>");
+    }
+    if(jQuery(this).val()=='Second'){
+      jQuery("#submitSearch").before("<div class='form-group' id='specificField'><label for='specific'>Every __ Second(s): </label><input class='form-inline' type='number' name='specific' value='45'/></div>");
+    }
+  });
+
    jQuery("#searchDetails").on('submit',function(e){
      e.preventDefault();
      var submitObject = {};
-     submitObject['startDate'] = Date(jQuery("#startDate").val());
+     var dateObject = jQuery("#datetimepicker").data("DateTimePicker").date()["_d"];
+     submitObject['minute'] = dateObject.getMinutes();
+     submitObject['hour'] = dateObject.getHours();
+     submitObject['day'] = dateObject.getDate();
+     submitObject['month'] = dateObject.getMonth();
+     submitObject['day_of_week'] = dateObject.getDay();
+
      submitObject['frequency'] = jQuery("#frequency").find(":selected").text();
      submitObject['searchTerm'] = jQuery("input.gsc-input").val();
      //send to cronJob.php
@@ -54,10 +74,13 @@ jQuery(document).ready(function(){
                  <p>Update Frequency: </p>
                  <form id="searchDetails" action="#">
                    <label for="datetimepicker4">Start Date:</label>
-                   <input name="startDate" type='text' class="form-control" id='datetimepicker4' />
+                   <input name="startDate" type='text' class="form-control" id='datetimepicker' />
                    <div class="form-group">
                      <label for="often">How Often? (select one):</label>
                      <select name="frequency" class="form-control" id="frequency">
+                       <option>Second</option>
+                       <option>Minute</option>
+                       <option>Hourly</option>
                        <option>Daily</option>
                        <option>Weekly</option>
                        <option>Monthly</option>
@@ -68,7 +91,7 @@ jQuery(document).ready(function(){
                </div>
                <script type="text/javascript">
                    jQuery(function () {
-                       jQuery('#datetimepicker4').datetimepicker();
+                       jQuery('#datetimepicker').datetimepicker();
                    });
                </script>
            </div>

@@ -28,7 +28,7 @@ jQuery(document).ready(function(){
 
    jQuery("#searchDetails").on('submit',function(e){
      e.preventDefault();
-     var submitObject = {};
+     var submitObject = new Object();
      var dateObject = jQuery("#datetimepicker").data("DateTimePicker").date()["_d"];
      submitObject['minute'] = dateObject.getMinutes();
      submitObject['hour'] = dateObject.getHours();
@@ -38,8 +38,13 @@ jQuery(document).ready(function(){
 
      submitObject['frequency'] = jQuery("#frequency").find(":selected").text();
      submitObject['searchTerm'] = jQuery("input.gsc-input").val();
-     //send to cronJob.php
-     console.log(submitObject);
+	 console.log(submitObject);
+     jQuery.post("../php/cronJob.php",{'data':JSON.stringify(submitObject)},function(data,result){
+		jQuery("#searchDetails").after("<div class='alert alert-success'>Saved Successfully</div>");
+		console.log(data);
+	 }).fail(function(data){
+		console.log(data);
+	 });
    });
  });
 </script>
@@ -86,7 +91,10 @@ jQuery(document).ready(function(){
                        <option>Monthly</option>
                      </select>
                    </div>
-                   <input type='submit' class='btn btn-success' id='submitSearch' value='Save Search'/>
+				   </br>
+				   <label for = 'searchName'>Choose a Name for this search: </label>
+					<input class='form-inline' type='text' name='searchName' id='searchName' placeholder='e.g. iPhone'/>
+                   <input type='submit' class='btn btn-success' id='submitSearch' value='Save Search'/>				   
                  </form>
                </div>
                <script type="text/javascript">

@@ -1,10 +1,25 @@
 <html>
 	
 	<?php
+		
+			session_start();
+			if(isset($_SESSION['error'])){
+			  header('Location: /client/loginView.php');
+			}else{
+			  unset($_SESSION['error']);
+			}
+
+	
+	
 		//testing function, may be repurposed..."AIzaSyD9GBj2m-_lwsXwZZdwS5X3tj6blyEtMM8"
 		
 		if(isset($_POST['searchID'])){
 			$term = $_POST['searchID'];
+			$date = strtotime($_POST['timeStamp']);
+			$ts = new DateTime("@$date");
+			echo $ts->format('Y-m-d H:i:s');
+		
+			$freq = $_POST['freq'];
 			$user = $_SESSION['username'];
 			function search($term){
 				$key = "AIzaSyD9GBj2m-_lwsXwZZdwS5X3tj6blyEtMM8"; //disable this after project presentation!!!
@@ -15,8 +30,8 @@
 			//Save search results here
 			
 			$servername = "localhost";
-			$username = "williamchase";
-			$password = "superarbok514";
+			$username = "guest";
+			$password = "guestpassword";
 			$dbname = "phpfinalproject";
 
 			// Create connection
@@ -26,14 +41,16 @@
 			if ($conn->connect_error) {
 				die("Connection failed: " . $conn->connect_error);
 			} 
+		
 			$userID = intval($user);
-			$sql = $sql = "INSERT INTO SearchEvent (USERID, SEARCH_TERM, SEARCH_RESULT, SEARCH_NAME)
-			VALUES ('" . $userID . "', '" . $term . "' , '" . search($term) . "' , '" . $term . "')";
-			echo $term;
+			$sql = $sql = "INSERT INTO SearchEvent (USERID, SEARCH_TERM, SEARCH_NAME, SEARCH_TIME, SEARCH_FREQUENCY)
+			VALUES ('" . $userID . "', '" . $term . "' , '" . $term . "' , '" . $ts->format('Y-m-d H:i:s') . "' , '" . $freq . "')";
+			
 
 			if ($conn->query($sql) === TRUE) {
 				echo "Record updated successfully";
 			} else {
+					echo strtotime($date);
 				echo "Error updating record: " . $conn->error;
 			}
 

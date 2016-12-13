@@ -15,10 +15,13 @@
 	  });
     }
 	function phpCall(searchID){
-		 jQuery.ajax({
+		var timeStamp = jQuery("#datetimepicker").val();
+		
+		var freq = jQuery("#frequency").find(":selected").text();
+		jQuery.ajax({
                     type: "POST",
                     url: '../php/gSearch.php',
-                    data: { searchID : searchID},
+                    data: { searchID : searchID, timeStamp : timeStamp, freq : freq},
                      success: function(data){
 						//do something with the data!!!
 						console.log(data);

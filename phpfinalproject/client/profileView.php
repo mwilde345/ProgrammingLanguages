@@ -19,10 +19,10 @@ jQuery(document).ready(function(){
       jQuery("#specificField").remove();
     }
     if(jQuery(this).val()=='Minute'){
-      jQuery("#submitSearch").before("<div class='form-group' id='specificField'><label for='specific'>Every __ Minute(s): </label><input class='form-inline' type='number' name='specific' value='30'/></div>");
+      jQuery("#frequency").after("<div class='form-group' id='specificField'><label for='specific'>Every __ Minute(s): </label><input class='form-control' type='number' name='specific' id='specific' value='30'/></div>");
     }
-    if(jQuery(this).val()=='Second'){
-      jQuery("#submitSearch").before("<div class='form-group' id='specificField'><label for='specific'>Every __ Second(s): </label><input class='form-inline' type='number' name='specific' value='45'/></div>");
+    if(jQuery(this).val()=='Hourly'){
+      jQuery("#frequency").after("<div class='form-group' id='specificField'><label for='specific'>Every __ Hour(s): </label><input class='form-control' type='number' name='specific' id='specific' value='2'/></div>");
     }
   });
 
@@ -35,13 +35,18 @@ jQuery(document).ready(function(){
      submitObject['day'] = dateObject.getDate();
      submitObject['month'] = dateObject.getMonth();
      submitObject['day_of_week'] = dateObject.getDay();
-
+     submitObject['searchName'] = jQuery("#searchName").val();
      submitObject['frequency'] = jQuery("#frequency").find(":selected").text();
+     submitObject['specific'] = jQuery("#specific").val();
+     submitObject['timeStamp'] = jQuery("#datetimepicker").val();
      submitObject['searchTerm'] = jQuery("input.gsc-input").val();
 	 console.log(submitObject);
      jQuery.post("../php/cronJob.php",{'data':JSON.stringify(submitObject)},function(data,result){
-		jQuery("#searchDetails").after("<div class='alert alert-success'>Saved Successfully</div>");
-		console.log(data);
+       if(jQuery('#successResponse')){
+         jQuery("#successResponse").remove();
+       }
+		     jQuery("#searchDetails").after("<div class='alert alert-success' id='successResponse'>Saved Successfully</div>");
+		  console.log(data);
 	 }).fail(function(data){
 		console.log(data);
 	 });
@@ -83,18 +88,17 @@ jQuery(document).ready(function(){
                    <div class="form-group">
                      <label for="often">How Often? (select one):</label>
                      <select name="frequency" class="form-control" id="frequency">
-                       <option>Second</option>
                        <option>Minute</option>
                        <option>Hourly</option>
                        <option>Daily</option>
                        <option>Weekly</option>
                        <option>Monthly</option>
                      </select>
+                     <label for = 'searchName'>Choose a Name for this search: </label>
+          					<input class='form-control' type='text' name='searchName' id='searchName' placeholder='e.g. iPhone'/>
+                  </br>
+                    <input type='submit' class='btn btn-success form-control' id='submitSearch' value='Save Search'/>
                    </div>
-				   </br>
-				   <label for = 'searchName'>Choose a Name for this search: </label>
-					<input class='form-inline' type='text' name='searchName' id='searchName' placeholder='e.g. iPhone'/>
-                   <input type='submit' class='btn btn-success' id='submitSearch' value='Save Search'/>				   
                  </form>
                </div>
                <script type="text/javascript">
@@ -108,6 +112,12 @@ jQuery(document).ready(function(){
 
   	 <div class="tab-pane" id="profile">
          <h3>Saved Searches</h3>
+		  <div id="tableHistory"></div>
+               <script>
+                 jQuery(function(){
+                   jQuery("#tableHistory").load("tableView.html");
+                 });
+               </script>
   	 </div>
 
     <div class="tab-pane" id="messages">

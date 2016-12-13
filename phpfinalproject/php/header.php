@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="../css/customstyle.css" type="text/css">
 		<link rel="stylesheet" id="main-stylesheet" href="../bootstrap/dist/css/bootstrap.min.css" type="text/css">
 		<link rel="stylesheet" id="main-stylesheet" href="../bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" type="text/css">
+		<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.css"/>
+		<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.js"></script>
 
 
 	</head>

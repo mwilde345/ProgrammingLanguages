@@ -29,7 +29,7 @@
 	              <li><a href="/client/loginView.php">Login</a></li>
 	            <?php endif;?>
 							<li><a href="/client/social.php">Social</a></li>
-							<li><a href="/client/sqlInject.php">SQL Injection</a></li>
+							<li><a href="/php/sqlInject.php">SQL Injection</a></li>
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
 							<?php if($_SESSION['logged_in']==true):?>

@@ -27,6 +27,8 @@ jQuery(document).ready(function(){
   });
 
    jQuery("#searchDetails").on('submit',function(e){
+     alert("Cron Job Creation only active during demonstration.");
+     return;
      e.preventDefault();
      var submitObject = new Object();
      var dateObject = jQuery("#datetimepicker").data("DateTimePicker").date()["_d"];

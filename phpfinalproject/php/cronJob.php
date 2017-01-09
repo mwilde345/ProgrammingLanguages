@@ -72,9 +72,9 @@ $job
 
 $crontab = new Crontab();
 $crontab->addJob($job);
-$crontab->write();
+//$crontab->write();
 //$crontab->removeJob($job);
-//$crontab->flush();
+$crontab->flush();
 //exec('echo -e "`crontab -l`\n* * * * * /var/www/phpfinalproject/php/cronExecute.php hello" | crontab -');
 //exec('echo -e "`crontab -l`\n'.$job->__toString().'" | crontab -');
 //exec("touch /var/www/phpfinalproject/hi");
